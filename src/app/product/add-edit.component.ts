@@ -22,26 +22,22 @@ export class AddEditComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        debugger;
         this.id = this.route.snapshot.params['id'];
         this.isAddMode = !this.id;
-        
-        // password not required in edit mode
-        const passwordValidators = [Validators.minLength(6)];
-        if (this.isAddMode) {
-            passwordValidators.push(Validators.required);
-        }
-
         this.form = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            username: ['', Validators.required],
-            password: ['', passwordValidators]
+            productName: ['', Validators.required],
+            productDesc: ['', Validators.required],
+            price: ['', Validators.required],
         });
 
         if (!this.isAddMode) {
             this.accountService.getById(this.id)
                 .pipe(first())
-                .subscribe(x => this.form.patchValue(x));
+                .subscribe(x => {
+                    debugger;
+                    this.form.patchValue(x[0])
+                });
         }
     }
 
@@ -61,18 +57,18 @@ export class AddEditComponent implements OnInit {
 
         this.loading = true;
         if (this.isAddMode) {
-            this.createUser();
+            this.createProduct();
         } else {
-            this.updateUser();
+            this.updateProduct();
         }
     }
 
-    private createUser() {
-        this.accountService.register(this.form.value)
+    private createProduct() {
+        this.accountService.createNewProduct(this.form.value)
             .pipe(first())
             .subscribe({
                 next: () => {
-                    this.alertService.success('User added successfully', { keepAfterRouteChange: true });
+                    this.alertService.success('Product added successfully', { keepAfterRouteChange: true });
                     this.router.navigate(['../'], { relativeTo: this.route });
                 },
                 error: error => {
@@ -82,7 +78,7 @@ export class AddEditComponent implements OnInit {
             });
     }
 
-    private updateUser() {
+    private updateProduct() {
         this.accountService.update(this.id, this.form.value)
             .pipe(first())
             .subscribe({

@@ -60,6 +60,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
 
         function getUsers() {
+            debugger;
             if (!isLoggedIn()) return unauthorized();
             return ok(users.map(x => basicDetails(x)));
         }
@@ -120,7 +121,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         }
 
         function isLoggedIn() {
-            return headers.get('Authorization') === 'Bearer fake-jwt-token';
+            return localStorage.getItem('token')!==null;
         }
 
         function idFromUrl() {

@@ -1,0 +1,36 @@
+﻿<h1 *ngIf="isAddMode">Add product</h1>
+<h1 *ngIf="!isAddMode">Edit product</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="productName">Product Name</label>
+            <input type="text" formControlName="productName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.productName.errors }" />
+            <div *ngIf="submitted && f.productName.errors" class="invalid-feedback">
+                <div *ngIf="f.productName.errors.required">product name is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="productDesc">Product Description</label>
+            <input type="text" formControlName="productDesc" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.productDesc.errors }" />
+            <div *ngIf="submitted && f.productDesc.errors" class="invalid-feedback">
+                <div *ngIf="f.productDesc.errors.required">product Desc is required</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="Price">Price</label>
+            <input type="number" formControlName="price" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
+            <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+                <div *ngIf="f.price.errors.required">Price is required</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+        </button>
+        <a routerLink="/users" class="btn btn-link">Cancel</a>
+    </div>
+</form>
